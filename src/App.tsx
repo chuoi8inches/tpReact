@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import BeerList from './BeerList';
+import About from './About';
 
-function App() {
+const App: React.FC = () => {
+  const initialBeers:string[] = [];
+  const [beerList, setBeerList] = React.useState<string[]>(initialBeers);
+
+  const handleAddBeer = (beer: string) => {
+    setBeerList([...beerList, beer]);
+  };
+
+  const handleRemoveBeer = (index: number) => {
+    const updatedList = [...beerList];
+    updatedList.splice(index, 1);
+    setBeerList(updatedList);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About us</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <Routes>
+            <Route path="/" element={<BeerList beers={beerList} onAddBeer={handleAddBeer} onRemoveBeer={handleRemoveBeer} />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </div>
+      </Router>
   );
-}
+};
 
 export default App;
